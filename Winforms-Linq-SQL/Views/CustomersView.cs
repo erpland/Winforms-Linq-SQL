@@ -19,11 +19,13 @@ namespace WinformsLinqSQL.Views
     {
 
         private static CustomersView instance;
-        private CustomersController controller;
+        private CustomersController customersController;
+        private BindingSource bindingSource;
         private CustomersView()
         {
             InitializeComponent();
-            this.controller = CustomersController.Instance();
+            this.customersController = CustomersController.Instance();
+            bindingSource = new BindingSource();
             DisplayData();
 
         }
@@ -41,21 +43,42 @@ namespace WinformsLinqSQL.Views
 
         public void DisplayData()
         {
-            var (data, isSuccessfull) = controller.GetAllCustomerData(out string errorMessage);
+            var (data, isSuccessfull) = customersController.GetAllCustomerData(out string errorMessage);
             if (isSuccessfull)
             {
-                customerDataGrid.DataSource = data;
+                bindingSource.DataSource = data;
+                customerDataGrid.DataSource = bindingSource;
+                bindingSource.ResetBindings(false);
             }
             else
             {
                 ShowMessageBox(errorMessage, false);
             }
         }
+        //filter locally instaed of fetching from database again
+        public void PerformSearch()
+        {
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
+            {
+                customerDataGrid.DataSource = bindingSource;
+                return;
+            }
+            int.TryParse(txtSearch.Text, out int id);
+            customerDataGrid.DataSource = bindingSource.List
+                .Cast<dynamic>()
+                .Where(customer =>
+                customer.Id == id ||
+                customer.FirstName.ToLower().StartsWith(txtSearch.Text.ToLower()) ||
+                customer.LastName.ToLower().StartsWith(txtSearch.Text.ToLower()) ||
+                customer.PhoneNumber.Equals(txtSearch.Text)
+                )
+                .ToList();
+        }
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
             Customer customer = new Customer(txtFirstName.Text, txtLastName.Text, txtAdress.Text, txtPhoneNumber.Text);
-            if (controller.InsertNewCustomer(customer, out string errorMessage))
+            if (customersController.InsertNewCustomer(customer, out string errorMessage))
             {
                 DisplayData();
                 ShowMessageBox($"Successfully created user with id - {customer.Id}", true);
@@ -75,7 +98,7 @@ namespace WinformsLinqSQL.Views
                 return;
             }
             Customer customer = new Customer(id, txtFirstName.Text, txtLastName.Text, txtAdress.Text, txtPhoneNumber.Text);
-            if (controller.UpdateCustomer(customer, out string errorMessage))
+            if (customersController.UpdateCustomer(customer, out string errorMessage))
             {
                 DisplayData();
                 ShowMessageBox($"Successfully updated user with id - {customer.Id}", true);
@@ -94,7 +117,7 @@ namespace WinformsLinqSQL.Views
                 ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
                 return;
             }
-            if (controller.DeleteCustomer(id, out string errorMessage))
+            if (customersController.DeleteCustomer(id, out string errorMessage))
             {
                 DisplayData();
                 ShowMessageBox($"Successfully deleted user with id - {id}", true);
@@ -107,23 +130,16 @@ namespace WinformsLinqSQL.Views
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtSearch.Text))
-            {
-                DisplayData();
-                return;
-            }
+            PerformSearch();
 
-            int id = int.TryParse(txtSearch.Text, out id) ? id : 0;
-            var (data, isSuccessfull) = controller.SearchCustomer(id, txtSearch.Text, out string errorMessage);
-            if (isSuccessfull)
+        }
+        private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
             {
-                customerDataGrid.DataSource = data;
+                PerformSearch();
+                e.Handled = true;
             }
-            else
-            {
-                ShowMessageBox(errorMessage, false);
-            }
-
         }
         private void btnClear_Click(object sender, EventArgs e)
         {
@@ -132,7 +148,7 @@ namespace WinformsLinqSQL.Views
             txtLastName.Clear();
             txtAdress.Clear();
             txtPhoneNumber.Clear();
-            DisplayData();
+            customerDataGrid.DataSource = bindingSource;
         }
         private void customerDataGrid_MouseClick(object sender, MouseEventArgs e)
         {
@@ -147,5 +163,7 @@ namespace WinformsLinqSQL.Views
         {
             MessageBox.Show(message, isSuccess ? "Success" : "Error", MessageBoxButtons.OK, isSuccess ? MessageBoxIcon.Information : MessageBoxIcon.Error);
         }
+
+
     }
 }

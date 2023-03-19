@@ -52,6 +52,7 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\Validation.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\TableModels\CustomerTableModel.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetails.cs" />

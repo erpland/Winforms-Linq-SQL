@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
+using WinformsLinqSQL.Models.TableModels;
 
 namespace WinformsLinqSQL.Controllers
 {
@@ -25,11 +26,11 @@ namespace WinformsLinqSQL.Controllers
             }
             return instance;
         }
-        public (List<dynamic>, bool) GetAllCustomerData(out string errorMessage)
+        public (List<CustomerTableModel>, bool) GetAllCustomerData(out string errorMessage)
         {
             try
             {
-                List<dynamic> data = CustomerRepository.GetAllData();
+                List<CustomerTableModel> data = CustomerRepository.GetAllData();
                 errorMessage = string.Empty;
                 return (data, true);
             }
@@ -95,6 +96,7 @@ namespace WinformsLinqSQL.Controllers
             }
         }
 
+        //not used search was filtered locally
         public (List<dynamic>, bool) SearchCustomer(int id, string value, out string errorMessage)
         {
             try

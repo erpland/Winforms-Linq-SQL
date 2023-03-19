@@ -8,15 +8,17 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WinformsLinqSQL.Models.TableModels;
 
 namespace WinformsLinqSQL.Repositories
 {
     public static class CustomerRepository
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["StoreDbConnectionString"].ConnectionString;
-        public static List<dynamic> GetAllData()
+        static StoreDataContext db = new StoreDataContext(connectionString);
+        public static List<CustomerTableModel> GetAllData()
         {
-            using (var db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext(connectionString))
             {
                 try
                 {
@@ -28,18 +30,18 @@ namespace WinformsLinqSQL.Repositories
                                  join p in db.Products on od.ProductId equals p.Id into products
                                  from p in products.DefaultIfEmpty()
                                  group new { c, od, p } by new { c.Id, c.FirstName, c.LastName, c.PhoneNumber, c.Address } into g
-                                 select new
+                                 select new CustomerTableModel
                                  {
-                                     g.Key.Id,
-                                     g.Key.FirstName,
-                                     g.Key.LastName,
-                                     g.Key.PhoneNumber,
-                                     g.Key.Address,
-                                     Total_Quantity = g.Sum(x => x.od != null ? x.od.Qty : 0),
-                                     Total_Orders = g.Count(x => x.od.OrderId != null),
-                                     Total_Price = g.Sum(x => x.p != null && x.od != null ? x.p.Price * x.od.Qty : 0)
+                                     Id = g.Key.Id,
+                                     FirstName = g.Key.FirstName,
+                                     LastName = g.Key.LastName,
+                                     PhoneNumber = g.Key.PhoneNumber,
+                                     Address = g.Key.Address,
+                                     TotalQuantity = g.Sum(x => x.od != null ? x.od.Qty : 0),
+                                     TotalOrders = g.Count(x => x.od.OrderId != null),
+                                     TotalPrice = g.Sum(x => x.p != null && x.od != null ? x.p.Price * x.od.Qty : 0)
                                  };
-                    return result.ToList<dynamic>();
+                    return result.ToList<CustomerTableModel>();
                 }
                 catch (SqlException ex)
                 {
@@ -50,7 +52,7 @@ namespace WinformsLinqSQL.Repositories
 
         public static void Insert(Customer customer)
         {
-            using (var db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext(connectionString))
             {
                 try
                 {
@@ -69,7 +71,7 @@ namespace WinformsLinqSQL.Repositories
         }
         public static void Edit(Customer updatedCustomer)
         {
-            using (var db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext(connectionString))
             {
                 try
                 {
@@ -97,14 +99,14 @@ namespace WinformsLinqSQL.Repositories
         }
         public static void Delete(int id)
         {
-            using (var db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext(connectionString))
             {
                 try
                 {
                     var customer = db.Customers.SingleOrDefault(c => c.Id == id);
                     if (customer == null)
                     {
-                        throw new Exception($"ID: {id} does not exists");
+                        throw new DataAccessException($"ID: {id} does not exists");
                     }
                     db.Customers.DeleteOnSubmit(customer);
 
@@ -121,14 +123,16 @@ namespace WinformsLinqSQL.Repositories
             }
         }
 
+
+        //not used search was filtered locally
         public static List<dynamic> SearchByValue(int id, string value)
         {
-            using (var db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext(connectionString))
             {
                 try
                 {
                     var result = from c in db.Customers
-                                 where c.FirstName.StartsWith(value) || c.LastName.StartsWith(value) || c.PhoneNumber.Equals(value) || c.Id == id
+                                 where c.FirstName.StartsWith(value) || c.LastName.StartsWith(value) || c.Address.StartsWith(value) || c.PhoneNumber.Equals(value) || c.Id == id
                                  join o in db.Orders on c.Id equals o.CustomerId into orders
                                  from o in orders.DefaultIfEmpty()
                                  join od in db.OrderDetails on o.Id equals od.OrderId into orderDetails

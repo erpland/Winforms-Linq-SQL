@@ -85,6 +85,7 @@ namespace WinformsLinqSQL.Views
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(695, 26);
             this.txtSearch.TabIndex = 0;
+            this.txtSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearch_KeyPress);
             // 
             // label1
             // 
