@@ -1,5 +1,5 @@
 ﻿using WinformsLinqSQL.Controllers;
-using WinformsLinqSQL.Models;
+using WinformsLinqSQL.Repositories;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,29 +41,28 @@ namespace WinformsLinqSQL.Views
 
         public void DisplayData()
         {
-            try
+            (List<dynamic> data, bool isSuccessfull) = controller.GetAllCutomerData(out string errorMessage);
+            if (isSuccessfull)
             {
-                List<dynamic> data = controller.GetAllCutomerData();
                 customerDataGrid.DataSource = data;
             }
-            catch (Exception ex)
+            else
             {
-                ShowMessageBox(ex.Message, false);
+                ShowMessageBox(errorMessage, false);
             }
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
             Customer customer = new Customer(txtFirstName.Text, txtLastName.Text, txtAdress.Text, txtPhoneNumber.Text);
-            try
+            if (controller.InsertNewCustomer(customer, out string errorMessage))
             {
-                controller.InsertNewCustomer(customer);
                 DisplayData();
                 ShowMessageBox($"Successfully created user with id - {customer.Id}", true);
             }
-            catch (Exception ex)
+            else
             {
-                ShowMessageBox(ex.Message, false);
+                ShowMessageBox(errorMessage, false);
             }
         }
 
@@ -76,15 +75,14 @@ namespace WinformsLinqSQL.Views
                 return;
             }
             Customer customer = new Customer(id, txtFirstName.Text, txtLastName.Text, txtAdress.Text, txtPhoneNumber.Text);
-            try
+            if (controller.UpdateCustomer(customer, out string errorMessage))
             {
-                controller.UpdateCustomer(customer);
                 DisplayData();
                 ShowMessageBox($"Successfully updated user with id - {customer.Id}", true);
             }
-            catch (Exception ex)
+            else
             {
-                ShowMessageBox(ex.Message, false);
+                ShowMessageBox(errorMessage, false);
             }
         }
 
@@ -96,15 +94,14 @@ namespace WinformsLinqSQL.Views
                 ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
                 return;
             }
-            try
+            if (controller.DeleteCustomer(id, out string errorMessage))
             {
-                controller.DeleteCustomer(id);
                 DisplayData();
                 ShowMessageBox($"Successfully deleted user with id - {id}", true);
             }
-            catch (Exception ex)
+            else
             {
-                ShowMessageBox(ex.Message, false);
+                ShowMessageBox(errorMessage, false);
             }
         }
 
@@ -113,21 +110,20 @@ namespace WinformsLinqSQL.Views
             if (txtSearch.Text.Trim() == "")
             {
                 DisplayData();
+                return;
+            }
+
+            int id = int.TryParse(txtSearch.Text, out id) ? id : 0;
+            (List<dynamic> data, bool isSuccessfull) = controller.SearchCustomer(id, txtSearch.Text, out string errorMessage);
+            if (isSuccessfull)
+            {
+                customerDataGrid.DataSource = data;
             }
             else
             {
-                int id = int.TryParse(txtSearch.Text, out id) ? id : 0;
-                try
-                {
-
-                    List<dynamic> data = controller.SearchCustomer(id, txtSearch.Text);
-                    customerDataGrid.DataSource = data;
-                }
-                catch (Exception ex)
-                {
-                    ShowMessageBox(ex.Message, false);
-                }
+                ShowMessageBox(errorMessage, false);
             }
+
         }
         private void btnClear_Click(object sender, EventArgs e)
         {

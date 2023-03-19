@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WinformsLinqSQL.Models
+namespace WinformsLinqSQL.Repositories
 {
     [Table(Name = "orders")]
     public class Order

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace WinformsLinqSQL.Models
+namespace WinformsLinqSQL.Repositories
 {
     [Table(Name = "customers")]
     public class Customer

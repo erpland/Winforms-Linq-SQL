@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Data.Linq;
 using System.Configuration;
 
-namespace WinformsLinqSQL.Models
+namespace WinformsLinqSQL.Repositories
 {
     public class StoreDataContext : DataContext
     {

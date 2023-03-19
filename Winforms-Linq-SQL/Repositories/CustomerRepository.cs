@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Linq;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WinformsLinqSQL.Models
+namespace WinformsLinqSQL.Repositories
 {
-    public static class CustomerHelper
+    public static class CustomerRepository
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["StoreDbConnectionString"].ConnectionString;
         public static List<dynamic> GetAllData()
@@ -39,9 +41,9 @@ namespace WinformsLinqSQL.Models
                                  };
                     return result.ToList<dynamic>();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw new Exception("Unable to get data from database\r\n" + ex.Message);
+                    throw new DataAccessException($"Error communicating with the database\r\n {ex.Message}", ex);
                 }
             }
         }
@@ -55,9 +57,13 @@ namespace WinformsLinqSQL.Models
                     db.Customers.InsertOnSubmit(customer);
                     db.SubmitChanges();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw new Exception("Unable to insert new customer\r\n" + ex.Message);
+                    throw new DataAccessException($"Error communicating with the database\r\n{ex.Message}", ex);
+                }
+                catch (ChangeConflictException ex)
+                {
+                    throw new ChangeConflictException($"Conflict in inserting data\r\n {ex.Message}", ex);
                 }
             }
         }
@@ -78,11 +84,16 @@ namespace WinformsLinqSQL.Models
                     customer.PhoneNumber = updatedCustomer.PhoneNumber;
                     db.SubmitChanges();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw new Exception($"Unable to save changes to customer -{updatedCustomer.FirstName} {updatedCustomer.LastName} \r\n {ex.Message}");
+                    throw new DataAccessException($"Error communicating with the database\r\n{ex.Message}", ex);
+                }
+                catch (ChangeConflictException ex)
+                {
+                    throw new ChangeConflictException($"Conflict in editing data\r\n {ex.Message}", ex);
                 }
             }
+
         }
         public static void Delete(int id)
         {
@@ -99,9 +110,13 @@ namespace WinformsLinqSQL.Models
 
                     db.SubmitChanges();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw new Exception($"Unable to delete customer with id - {id} \r\n {ex.Message}");
+                    throw new DataAccessException($"Error communicating with the database\r\n{ex.Message}", ex);
+                }
+                catch (ChangeConflictException ex)
+                {
+                    throw new ChangeConflictException($"Conflict in deleting customer with id {id} \r\n {ex.Message}", ex);
                 }
             }
         }
@@ -113,7 +128,7 @@ namespace WinformsLinqSQL.Models
                 try
                 {
                     var result = from c in db.Customers
-                                 where c.FirstName.StartsWith(value) || c.LastName.StartsWith(value) || c.PhoneNumber.Equals(value)|| c.Id == id
+                                 where c.FirstName.StartsWith(value) || c.LastName.StartsWith(value) || c.PhoneNumber.Equals(value) || c.Id == id
                                  join o in db.Orders on c.Id equals o.CustomerId into orders
                                  from o in orders.DefaultIfEmpty()
                                  join od in db.OrderDetails on o.Id equals od.OrderId into orderDetails
@@ -134,9 +149,9 @@ namespace WinformsLinqSQL.Models
                                  };
                     return result.ToList<dynamic>();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw new Exception("Unable to get data from database\r\n" + ex.Message);
+                    throw new DataAccessException($"Error communicating with the database\r\n{ex.Message}", ex);
                 }
             }
         }

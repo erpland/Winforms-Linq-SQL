@@ -1,10 +1,12 @@
-﻿using WinformsLinqSQL.Models;
+﻿using WinformsLinqSQL.Repositories;
 using WinformsLinqSQL.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 
 namespace WinformsLinqSQL.Controllers
 {
@@ -23,30 +25,89 @@ namespace WinformsLinqSQL.Controllers
             }
             return instance;
         }
-        public List<dynamic> GetAllCutomerData()
+        public (List<dynamic>, bool) GetAllCutomerData(out string errorMessage)
         {
-                List<dynamic> data = CustomerHelper.GetAllData();
-                return data;
+            try
+            {
+                List<dynamic> data = CustomerRepository.GetAllData();
+                errorMessage = string.Empty;
+                return (data, true);
+            }
+            catch (DataAccessException ex)
+            {
+                errorMessage = ex.Message;
+                return (null, false);
+            }
         }
-        public void InsertNewCustomer(Customer customer)
+        public bool InsertNewCustomer(Customer customer, out string errorMessage)
         {
-            Validation.ValidateCustomer(customer);
-            CustomerHelper.Insert(customer);
+            try
+            {
+                Validation.ValidateCustomer(customer);
+                CustomerRepository.Insert(customer);
+                errorMessage = string.Empty;
+                return true;
+            }
+            catch (ValidationException ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
+            catch (DataAccessException ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
         }
-        public void UpdateCustomer(Customer customer)
+        public bool UpdateCustomer(Customer customer, out string errorMessage)
         {
-            Validation.ValidateCustomer(customer);
-            CustomerHelper.Edit(customer);
+            try
+            {
+                Validation.ValidateCustomer(customer);
+                CustomerRepository.Edit(customer);
+                errorMessage = string.Empty;
+                return true;
+
+            }
+            catch (ValidationException ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
+            catch (DataAccessException ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
         }
-        public void DeleteCustomer(int id)
+        public bool DeleteCustomer(int id, out string errorMessage)
         {
-            CustomerHelper.Delete(id);
+            try
+            {
+                CustomerRepository.Delete(id);
+                errorMessage = string.Empty;
+                return true;
+            }
+            catch (DataAccessException ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
         }
 
-        public List<dynamic> SearchCustomer(int id, string value)
+        public (List<dynamic>, bool) SearchCustomer(int id, string value, out string errorMessage)
         {
-            List<dynamic> data = CustomerHelper.SearchByValue(id, value);
-            return data;
+            try
+            {
+                List<dynamic> data = CustomerRepository.SearchByValue(id, value);
+                errorMessage = string.Empty;
+                return (data, true);
+            }
+            catch (DataAccessException ex)
+            {
+                errorMessage = ex.Message;
+                return (null, false);
+            }
         }
     }
 }

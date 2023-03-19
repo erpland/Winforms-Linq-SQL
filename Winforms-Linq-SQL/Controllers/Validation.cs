@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using WinformsLinqSQL.Models;
+using WinformsLinqSQL.Repositories;
 
 namespace WinformsLinqSQL.Controllers
 {
@@ -22,7 +22,7 @@ namespace WinformsLinqSQL.Controllers
                 {
                     errorMsg += result.ErrorMessage + "\n";
                 }
-                throw new Exception(errorMsg);
+                throw new ValidationException(errorMsg);
             }
         }
     }
