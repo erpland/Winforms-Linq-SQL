@@ -81,6 +81,7 @@ namespace WinformsLinqSQL.Views
             this.btnOrders.TabIndex = 0;
             this.btnOrders.Text = "Orders";
             this.btnOrders.UseVisualStyleBackColor = true;
+            this.btnOrders.Click += new System.EventHandler(this.btnOrders_Click);
             // 
             // btnCustomers
             // 

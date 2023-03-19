@@ -11,6 +11,10 @@ namespace WinformsLinqSQL.Repositories
 {
     public class StoreDataContext : DataContext
     {
+        private static string connectionString = ConfigurationManager.ConnectionStrings["StoreDbConnectionString"].ConnectionString;
+        public StoreDataContext() : base(connectionString)
+        {
+        }
         public StoreDataContext(string connectionString) : base(connectionString)
         {
         }

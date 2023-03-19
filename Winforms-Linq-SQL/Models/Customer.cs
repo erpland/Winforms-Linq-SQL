@@ -11,7 +11,7 @@ namespace WinformsLinqSQL.Repositories
     [Table(Name = "customers")]
     public class Customer
     {
-        [Column(IsPrimaryKey = true, IsDbGenerated = true, Name = "cutomer_id")]
+        [Column(IsPrimaryKey = true, IsDbGenerated = true, Name = "customer_id")]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "First name is a requierd field!")]

@@ -12,7 +12,7 @@ namespace WinformsLinqSQL.Repositories
     {
         [Column(IsPrimaryKey = true,Name = "order_id")]
         public int Id { get; set; }
-        [Column(Name = "cutomer_id")]
+        [Column(Name = "customer_id")]
         public int CustomerId { get; set; }
         [Column(Name ="order_date")]
         public DateTime Date { get; set; }

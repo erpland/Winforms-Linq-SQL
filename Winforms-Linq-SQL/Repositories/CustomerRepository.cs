@@ -2,7 +2,6 @@
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Linq;
@@ -12,13 +11,17 @@ using WinformsLinqSQL.Models.TableModels;
 
 namespace WinformsLinqSQL.Repositories
 {
-    public static class CustomerRepository
+    public sealed class CustomerRepository : BaseRepository, IRepository<Customer,CustomerTableModel>
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["StoreDbConnectionString"].ConnectionString;
-        static StoreDataContext db = new StoreDataContext(connectionString);
-        public static List<CustomerTableModel> GetAllData()
+        private static readonly CustomerRepository instance = instance = new CustomerRepository();
+        private CustomerRepository() : base() { }
+        public static CustomerRepository Instance
         {
-            using (db = new StoreDataContext(connectionString))
+            get { return instance; }
+        }
+        public List<CustomerTableModel> GetAllData()
+        {
+            using (db = new StoreDataContext())
             {
                 try
                 {
@@ -50,9 +53,9 @@ namespace WinformsLinqSQL.Repositories
             }
         }
 
-        public static void Insert(Customer customer)
+        public void Insert(Customer customer)
         {
-            using (db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext())
             {
                 try
                 {
@@ -69,9 +72,9 @@ namespace WinformsLinqSQL.Repositories
                 }
             }
         }
-        public static void Edit(Customer updatedCustomer)
+        public void Edit(Customer updatedCustomer)
         {
-            using (db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext())
             {
                 try
                 {
@@ -97,9 +100,9 @@ namespace WinformsLinqSQL.Repositories
             }
 
         }
-        public static void Delete(int id)
+        public void Delete(int id)
         {
-            using (db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext())
             {
                 try
                 {
@@ -125,9 +128,9 @@ namespace WinformsLinqSQL.Repositories
 
 
         //not used search was filtered locally
-        public static List<dynamic> SearchByValue(int id, string value)
+        public List<dynamic> SearchByValue(int id, string value)
         {
-            using (db = new StoreDataContext(connectionString))
+            using (db = new StoreDataContext())
             {
                 try
                 {

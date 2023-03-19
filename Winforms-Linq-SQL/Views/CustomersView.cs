@@ -17,7 +17,6 @@ namespace WinformsLinqSQL.Views
 {
     public partial class CustomersView : Form
     {
-
         private static CustomersView instance;
         private CustomersController customersController;
         private BindingSource bindingSource;
@@ -52,7 +51,7 @@ namespace WinformsLinqSQL.Views
             }
             else
             {
-                ShowMessageBox(errorMessage, false);
+                ViewHelpers.ShowMessageBox(errorMessage, false);
             }
         }
         //filter locally instaed of fetching from database again
@@ -81,11 +80,11 @@ namespace WinformsLinqSQL.Views
             if (customersController.InsertNewCustomer(customer, out string errorMessage))
             {
                 DisplayData();
-                ShowMessageBox($"Successfully created user with id - {customer.Id}", true);
+                ViewHelpers.ShowMessageBox($"Successfully created user with id - {customer.Id}", true);
             }
             else
             {
-                ShowMessageBox(errorMessage, false);
+                ViewHelpers.ShowMessageBox(errorMessage, false);
             }
         }
 
@@ -94,18 +93,18 @@ namespace WinformsLinqSQL.Views
             int.TryParse(txtId.Text, out int id);
             if (id == 0)
             {
-                ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
+                ViewHelpers.ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
                 return;
             }
             Customer customer = new Customer(id, txtFirstName.Text, txtLastName.Text, txtAdress.Text, txtPhoneNumber.Text);
             if (customersController.UpdateCustomer(customer, out string errorMessage))
             {
                 DisplayData();
-                ShowMessageBox($"Successfully updated user with id - {customer.Id}", true);
+                ViewHelpers.ShowMessageBox($"Successfully updated user with id - {customer.Id}", true);
             }
             else
             {
-                ShowMessageBox(errorMessage, false);
+                ViewHelpers.ShowMessageBox(errorMessage, false);
             }
         }
 
@@ -114,17 +113,17 @@ namespace WinformsLinqSQL.Views
             int.TryParse(txtId.Text, out int id);
             if (id == 0)
             {
-                ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
+                ViewHelpers.ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
                 return;
             }
             if (customersController.DeleteCustomer(id, out string errorMessage))
             {
                 DisplayData();
-                ShowMessageBox($"Successfully deleted user with id - {id}", true);
+                ViewHelpers.ShowMessageBox($"Successfully deleted user with id - {id}", true);
             }
             else
             {
-                ShowMessageBox(errorMessage, false);
+                ViewHelpers.ShowMessageBox(errorMessage, false);
             }
         }
 
@@ -152,18 +151,14 @@ namespace WinformsLinqSQL.Views
         }
         private void customerDataGrid_MouseClick(object sender, MouseEventArgs e)
         {
-            int rowIdx = customerDataGrid.CurrentRow.Index;
-            txtId.Text = customerDataGrid[0, rowIdx].Value.ToString();
-            txtFirstName.Text = customerDataGrid[1, rowIdx].Value.ToString();
-            txtLastName.Text = customerDataGrid[2, rowIdx].Value.ToString();
-            txtPhoneNumber.Text = customerDataGrid[3, rowIdx].Value.ToString();
-            txtAdress.Text = customerDataGrid[4, rowIdx].Value.ToString();
+            ViewHelpers.PopulateTextBoxesFromDateGrid(
+                customerDataGrid,
+                customerDataGrid.CurrentRow.Index,
+                new TextBox[]
+                {
+                    txtId, txtFirstName, txtLastName,txtPhoneNumber, txtAdress
+                }, new int[]{
+                0,1,2,3,4});
         }
-        public void ShowMessageBox(string message, bool isSuccess = false)
-        {
-            MessageBox.Show(message, isSuccess ? "Success" : "Error", MessageBoxButtons.OK, isSuccess ? MessageBoxIcon.Information : MessageBoxIcon.Error);
-        }
-
-
     }
 }

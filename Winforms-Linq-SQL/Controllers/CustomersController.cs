@@ -14,9 +14,11 @@ namespace WinformsLinqSQL.Controllers
     public class CustomersController
     {
         private static CustomersController instance;
+        private CustomerRepository repository;
 
         private CustomersController()
         {
+            repository = CustomerRepository.Instance;
         }
         public static CustomersController Instance()
         {
@@ -30,7 +32,7 @@ namespace WinformsLinqSQL.Controllers
         {
             try
             {
-                List<CustomerTableModel> data = CustomerRepository.GetAllData();
+                List<CustomerTableModel> data = repository.GetAllData();
                 errorMessage = string.Empty;
                 return (data, true);
             }
@@ -45,7 +47,7 @@ namespace WinformsLinqSQL.Controllers
             try
             {
                 Validation.ValidateCustomer(customer);
-                CustomerRepository.Insert(customer);
+                repository.Insert(customer);
                 errorMessage = string.Empty;
                 return true;
             }
@@ -65,7 +67,7 @@ namespace WinformsLinqSQL.Controllers
             try
             {
                 Validation.ValidateCustomer(customer);
-                CustomerRepository.Edit(customer);
+                repository.Edit(customer);
                 errorMessage = string.Empty;
                 return true;
 
@@ -85,7 +87,7 @@ namespace WinformsLinqSQL.Controllers
         {
             try
             {
-                CustomerRepository.Delete(id);
+                repository.Delete(id);
                 errorMessage = string.Empty;
                 return true;
             }
@@ -101,7 +103,7 @@ namespace WinformsLinqSQL.Controllers
         {
             try
             {
-                List<dynamic> data = CustomerRepository.SearchByValue(id, value);
+                List<dynamic> data = repository.SearchByValue(id, value);
                 errorMessage = string.Empty;
                 return (data, true);
             }
