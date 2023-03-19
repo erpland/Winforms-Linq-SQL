@@ -37,7 +37,7 @@ namespace WinformsLinqSQL.Repositories
                                      g.Key.Address,
                                      Total_Quantity = g.Sum(x => x.od != null ? x.od.Qty : 0),
                                      Total_Orders = g.Count(x => x.od.OrderId != null),
-                                     Total_Price = g.Sum(x => x.p != null ? x.p.Price : 0)
+                                     Total_Price = g.Sum(x => x.p != null && x.od != null ? x.p.Price * x.od.Qty : 0)
                                  };
                     return result.ToList<dynamic>();
                 }
@@ -145,7 +145,7 @@ namespace WinformsLinqSQL.Repositories
                                      g.Key.Address,
                                      Total_Quantity = g.Sum(x => x.od != null ? x.od.Qty : 0),
                                      Total_Orders = g.Count(x => x.od.OrderId != null),
-                                     Total_Price = g.Sum(x => x.p != null ? x.p.Price : 0)
+                                     Total_Price = g.Sum(x => x.p != null && x.od != null ? x.p.Price * x.od.Qty : 0)
                                  };
                     return result.ToList<dynamic>();
                 }

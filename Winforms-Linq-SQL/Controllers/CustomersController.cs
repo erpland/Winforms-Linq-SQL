@@ -25,7 +25,7 @@ namespace WinformsLinqSQL.Controllers
             }
             return instance;
         }
-        public (List<dynamic>, bool) GetAllCutomerData(out string errorMessage)
+        public (List<dynamic>, bool) GetAllCustomerData(out string errorMessage)
         {
             try
             {

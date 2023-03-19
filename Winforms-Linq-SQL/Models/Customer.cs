@@ -11,16 +11,16 @@ namespace WinformsLinqSQL.Repositories
     [Table(Name = "customers")]
     public class Customer
     {
-        [Column(IsPrimaryKey = true,IsDbGenerated =true, Name = "cutomer_id")]
+        [Column(IsPrimaryKey = true, IsDbGenerated = true, Name = "cutomer_id")]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "First name is a requierd field!")]
-        [StringLength(50,MinimumLength =2,ErrorMessage ="First name must be between 2-50 charcters")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be between 2-50 charcters")]
         [Column(Name = "first_name")]
         public string FirstName { get; set; }
-        
+
         [Required(ErrorMessage = "Last name is a requierd field!")]
-        [StringLength(50,MinimumLength =2,ErrorMessage ="Last name must be between 2-50 charcters")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2-50 charcters")]
         [Column(Name = "last_name")]
         public string LastName { get; set; }
 
@@ -30,14 +30,14 @@ namespace WinformsLinqSQL.Repositories
         public string Address { get; set; }
 
         [Required(ErrorMessage = "Phone number is a requierd field!")]
-        [StringLength(12, MinimumLength = 7, ErrorMessage = "Last name must be between 7-12 charcters")]
-        [RegularExpression(@"^[0-9]*$",ErrorMessage ="Phone number must contain only numbers!")]
-        [Column (Name = "phone_number")]
+        [StringLength(12, MinimumLength = 7, ErrorMessage = "Phone number must be between 7-12 charcters")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Phone number must contain only numbers!")]
+        [Column(Name = "phone_number")]
         public string PhoneNumber { get; set; }
 
         public Customer()
         {
-            
+
         }
 
         public Customer(string firstName, string lastName, string address, string phoneNumber)

@@ -41,7 +41,7 @@ namespace WinformsLinqSQL.Views
 
         public void DisplayData()
         {
-            (List<dynamic> data, bool isSuccessfull) = controller.GetAllCutomerData(out string errorMessage);
+            var (data, isSuccessfull) = controller.GetAllCustomerData(out string errorMessage);
             if (isSuccessfull)
             {
                 customerDataGrid.DataSource = data;
@@ -68,7 +68,7 @@ namespace WinformsLinqSQL.Views
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            int id = int.TryParse(txtId.Text, out id) ? id : 0;
+            int.TryParse(txtId.Text, out int id);
             if (id == 0)
             {
                 ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
@@ -88,7 +88,7 @@ namespace WinformsLinqSQL.Views
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            int id = int.TryParse(txtId.Text, out id) ? id : 0;
+            int.TryParse(txtId.Text, out int id);
             if (id == 0)
             {
                 ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
@@ -107,14 +107,14 @@ namespace WinformsLinqSQL.Views
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            if (txtSearch.Text.Trim() == "")
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
             {
                 DisplayData();
                 return;
             }
 
             int id = int.TryParse(txtSearch.Text, out id) ? id : 0;
-            (List<dynamic> data, bool isSuccessfull) = controller.SearchCustomer(id, txtSearch.Text, out string errorMessage);
+            var (data, isSuccessfull) = controller.SearchCustomer(id, txtSearch.Text, out string errorMessage);
             if (isSuccessfull)
             {
                 customerDataGrid.DataSource = data;
