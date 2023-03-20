@@ -74,11 +74,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreDbDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="StoreDbDataSet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreDbDataSet1.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Views\CustomersView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,17 +140,6 @@
     </None>
     <None Include="StoreDbDataSet.xss">
       <DependentUpon>StoreDbDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="StoreDbDataSet1.xsc">
-      <DependentUpon>StoreDbDataSet1.xsd</DependentUpon>
-    </None>
-    <None Include="StoreDbDataSet1.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>StoreDbDataSet1.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="StoreDbDataSet1.xss">
-      <DependentUpon>StoreDbDataSet1.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
