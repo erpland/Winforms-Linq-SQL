@@ -16,5 +16,23 @@ namespace WinformsLinqSQL.Repositories
         public int OrderId { get; set; }
         [Column(IsPrimaryKey = true, Name = "prodcut_qty")]
         public int Qty { get; set; }
+
+        public OrderDetails()
+        {
+            
+        }
+
+        public OrderDetails(int orderId, int qty)
+        {
+            OrderId = orderId;
+            Qty = qty;
+        }
+
+        public OrderDetails(int productId, int orderId, int qty)
+        {
+            ProductId = productId;
+            OrderId = orderId;
+            Qty = qty;
+        }
     }
 }

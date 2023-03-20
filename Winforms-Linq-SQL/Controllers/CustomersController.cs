@@ -9,9 +9,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using WinformsLinqSQL.Models.TableModels;
 
-namespace WinformsLinqSQL.Controllers
+namespace WinformsLinqSQL.Models
 {
-    public class CustomersController
+    public class CustomersController:IBaseControllers<Customer,CustomerTableModel>
     {
         private static CustomersController instance;
         private CustomerRepository repository;
@@ -28,7 +28,7 @@ namespace WinformsLinqSQL.Controllers
             }
             return instance;
         }
-        public (List<CustomerTableModel>, bool) GetAllCustomerData(out string errorMessage)
+        public (List<CustomerTableModel>, bool) GetAll(out string errorMessage)
         {
             try
             {
@@ -42,11 +42,11 @@ namespace WinformsLinqSQL.Controllers
                 return (null, false);
             }
         }
-        public bool InsertNewCustomer(Customer customer, out string errorMessage)
+        public bool Insert(Customer customer, out string errorMessage)
         {
             try
             {
-                Validation.ValidateCustomer(customer);
+                Validation.ValidateFields(customer);
                 repository.Insert(customer);
                 errorMessage = string.Empty;
                 return true;
@@ -62,11 +62,11 @@ namespace WinformsLinqSQL.Controllers
                 return false;
             }
         }
-        public bool UpdateCustomer(Customer customer, out string errorMessage)
+        public bool Update(Customer customer, out string errorMessage)
         {
             try
             {
-                Validation.ValidateCustomer(customer);
+                Validation.ValidateFields(customer);
                 repository.Edit(customer);
                 errorMessage = string.Empty;
                 return true;
@@ -83,7 +83,7 @@ namespace WinformsLinqSQL.Controllers
                 return false;
             }
         }
-        public bool DeleteCustomer(int id, out string errorMessage)
+        public bool Delete(int id, out string errorMessage)
         {
             try
             {

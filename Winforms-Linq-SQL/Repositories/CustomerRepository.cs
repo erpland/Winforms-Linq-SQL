@@ -81,7 +81,7 @@ namespace WinformsLinqSQL.Repositories
                     var customer = db.Customers.SingleOrDefault(c => c.Id == updatedCustomer.Id);
                     if (customer == null)
                     {
-                        throw new Exception($"Customer {updatedCustomer.Id} does not exists");
+                        throw new DataAccessException($"Customer {updatedCustomer.Id} does not exists");
                     }
                     customer.FirstName = updatedCustomer.FirstName;
                     customer.LastName = updatedCustomer.LastName;

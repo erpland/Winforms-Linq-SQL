@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WinformsLinqSQL.Controllers;
+using WinformsLinqSQL.Models;
 using WinformsLinqSQL.Models.TableModels;
+using WinformsLinqSQL.Repositories;
 
 namespace WinformsLinqSQL.Views
 {
@@ -16,12 +17,12 @@ namespace WinformsLinqSQL.Views
     {
 
         private static OrdersView instance;
-        private OrdersController ordersController;
+        private OrdersController controller;
         private BindingSource bindingSource;
-        public OrdersView()
+        private OrdersView()
         {
             InitializeComponent();
-            this.ordersController = OrdersController.Instance();
+            this.controller = OrdersController.Instance();
             bindingSource = new BindingSource();
             DisplayData();
         }
@@ -36,9 +37,9 @@ namespace WinformsLinqSQL.Views
             }
             return instance;
         }
-        public void DisplayData()
+        private void DisplayData()
         {
-            var (data, isSuccessfull) = ordersController.GetAllOrdersData(out string errorMessage); if (isSuccessfull)
+            var (data, isSuccessfull) = controller.GetAll(out string errorMessage); if (isSuccessfull)
             {
                 bindingSource.DataSource = data;
                 OrdersDataGrid.DataSource = bindingSource;
@@ -49,7 +50,7 @@ namespace WinformsLinqSQL.Views
                 ViewHelpers.ShowMessageBox(errorMessage, false);
             }
         }
-        public void PerformSearch()
+        private void PerformSearch()
         {
             if (string.IsNullOrWhiteSpace(txtSearch.Text))
             {
@@ -67,7 +68,6 @@ namespace WinformsLinqSQL.Views
                 )
                 .ToList();
         }
-
         private void OrdersDataGrid_Click(object sender, EventArgs e)
         {
             int rowIndex = OrdersDataGrid.CurrentRow.Index;
@@ -95,6 +95,71 @@ namespace WinformsLinqSQL.Views
                 PerformSearch();
                 e.Handled = true;
             }
+        }
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+           ;
+            if (!int.TryParse(txtCustomerId.Text, out int customerId))
+            {
+                ViewHelpers.ShowMessageBox("Customer Id must be a valid nubmer that exist in the table", false);
+                return;
+            }
+            Order order = new Order(customerId,txtOrderDate.Value);
+            if (controller.Insert(order, out string errorMessage))
+            {
+                DisplayData();
+                ViewHelpers.ShowMessageBox($"Successfully created user with id - {order.Id}", true);
+            }
+            else
+            {
+                ViewHelpers.ShowMessageBox(errorMessage, false);
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            int.TryParse(txtOrderId.Text, out int orderId);
+            int.TryParse(txtCustomerId.Text, out int customerId);
+            if (orderId == 0 || customerId == 0)
+            {
+                ViewHelpers.ShowMessageBox("Order id and Customer id must be a valid nubmer that exist in the table", false);
+                return;
+            }
+            Order order = new Order(orderId,customerId,txtOrderDate.Value);
+            if (controller.Update(order, out string errorMessage))
+            {
+                DisplayData();
+                ViewHelpers.ShowMessageBox($"Successfully updated order with id - {order.Id}", true);
+            }
+            else
+            {
+                ViewHelpers.ShowMessageBox(errorMessage, false);
+            }
+        }
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            int.TryParse(txtOrderId.Text, out int id);
+            if (id == 0)
+            {
+                ViewHelpers.ShowMessageBox("Customer Id must be a valid nubmer that exist in the table", false);
+                return;
+            }
+            if (controller.Delete(id, out string errorMessage))
+            {
+                DisplayData();
+                ViewHelpers.ShowMessageBox($"Successfully deleted order with id - {id}", true);
+            }
+            else
+            {
+                ViewHelpers.ShowMessageBox(errorMessage, false);
+            }
+        }
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtCustomerId.Text = string.Empty;
+            txtOrderId.Text = string.Empty;
+            txtOrderDate.Text = string.Empty;
+            OrdersDataGrid.DataSource = bindingSource;
         }
     }
 

@@ -14,7 +14,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -50,8 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\IBaseControllers.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
-    <Compile Include="Controllers\Validation.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Models\Validation.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\TableModels\CustomerTableModel.cs" />
     <Compile Include="Models\TableModels\OrderTableModel.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="Repositories\DataAccessException.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
+    <Compile Include="Repositories\ProductsRepository.cs" />
     <Compile Include="Repositories\StoreDataContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,6 +73,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreDbDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="StoreDbDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreDbDataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomersView.cs">
       <SubType>Form</SubType>
@@ -88,6 +96,12 @@
     </Compile>
     <Compile Include="Views\OrdersView.Designer.cs">
       <DependentUpon>OrdersView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProductsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ProductsView.Designer.cs">
+      <DependentUpon>ProductsView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewHelpers.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -109,6 +123,9 @@
     <EmbeddedResource Include="Views\OrdersView.resx">
       <DependentUpon>OrdersView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProductsView.resx">
+      <DependentUpon>ProductsView.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -128,6 +145,17 @@
     </None>
     <None Include="StoreDbDataSet.xss">
       <DependentUpon>StoreDbDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="StoreDbDataSet1.xsc">
+      <DependentUpon>StoreDbDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="StoreDbDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>StoreDbDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="StoreDbDataSet1.xss">
+      <DependentUpon>StoreDbDataSet1.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

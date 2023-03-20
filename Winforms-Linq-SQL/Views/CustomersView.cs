@@ -1,4 +1,4 @@
-﻿using WinformsLinqSQL.Controllers;
+﻿using WinformsLinqSQL.Models;
 using WinformsLinqSQL.Repositories;
 using System;
 using System.Collections;
@@ -18,12 +18,12 @@ namespace WinformsLinqSQL.Views
     public partial class CustomersView : Form
     {
         private static CustomersView instance;
-        private CustomersController customersController;
+        private CustomersController controller;
         private BindingSource bindingSource;
         private CustomersView()
         {
             InitializeComponent();
-            this.customersController = CustomersController.Instance();
+            this.controller = CustomersController.Instance();
             bindingSource = new BindingSource();
             DisplayData();
 
@@ -40,9 +40,9 @@ namespace WinformsLinqSQL.Views
             return instance;
         }
 
-        public void DisplayData()
+        private void DisplayData()
         {
-            var (data, isSuccessfull) = customersController.GetAllCustomerData(out string errorMessage);
+            var (data, isSuccessfull) = controller.GetAll(out string errorMessage);
             if (isSuccessfull)
             {
                 bindingSource.DataSource = data;
@@ -55,7 +55,7 @@ namespace WinformsLinqSQL.Views
             }
         }
         //filter locally instaed of fetching from database again
-        public void PerformSearch()
+        private void PerformSearch()
         {
             if (string.IsNullOrWhiteSpace(txtSearch.Text))
             {
@@ -77,7 +77,7 @@ namespace WinformsLinqSQL.Views
         private void btnCreate_Click(object sender, EventArgs e)
         {
             Customer customer = new Customer(txtFirstName.Text, txtLastName.Text, txtAdress.Text, txtPhoneNumber.Text);
-            if (customersController.InsertNewCustomer(customer, out string errorMessage))
+            if (controller.Insert(customer, out string errorMessage))
             {
                 DisplayData();
                 ViewHelpers.ShowMessageBox($"Successfully created user with id - {customer.Id}", true);
@@ -97,7 +97,7 @@ namespace WinformsLinqSQL.Views
                 return;
             }
             Customer customer = new Customer(id, txtFirstName.Text, txtLastName.Text, txtAdress.Text, txtPhoneNumber.Text);
-            if (customersController.UpdateCustomer(customer, out string errorMessage))
+            if (controller.Update(customer, out string errorMessage))
             {
                 DisplayData();
                 ViewHelpers.ShowMessageBox($"Successfully updated user with id - {customer.Id}", true);
@@ -116,7 +116,7 @@ namespace WinformsLinqSQL.Views
                 ViewHelpers.ShowMessageBox("Id must be a valid nubmer that exist in the table", false);
                 return;
             }
-            if (customersController.DeleteCustomer(id, out string errorMessage))
+            if (controller.Delete(id, out string errorMessage))
             {
                 DisplayData();
                 ViewHelpers.ShowMessageBox($"Successfully deleted user with id - {id}", true);
@@ -147,6 +147,7 @@ namespace WinformsLinqSQL.Views
             txtLastName.Clear();
             txtAdress.Clear();
             txtPhoneNumber.Clear();
+            txtSearch.Clear();
             customerDataGrid.DataSource = bindingSource;
         }
         private void customerDataGrid_MouseClick(object sender, MouseEventArgs e)

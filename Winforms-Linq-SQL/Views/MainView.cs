@@ -14,6 +14,7 @@ namespace WinformsLinqSQL.Views
     {
         CustomersView customersView;
         OrdersView ordersView;
+        ProductsView productsView;
         public MainView()
         {
             InitializeComponent();
@@ -42,6 +43,19 @@ namespace WinformsLinqSQL.Views
             else
             {
                 ordersView.Activate();
+            }
+        }
+
+        private void btnProducts_Click(object sender, EventArgs e)
+        {
+            if(productsView == null || productsView.IsDisposed)
+            {
+                productsView = ProductsView.Instance(this);
+                productsView.Show();
+            }
+            else
+            {
+                productsView.Activate();
             }
         }
     }
