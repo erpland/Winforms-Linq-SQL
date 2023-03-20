@@ -1,13 +1,7 @@
-﻿using WinformsLinqSQL.Repositories;
-using WinformsLinqSQL.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
 using WinformsLinqSQL.Models.TableModels;
+using WinformsLinqSQL.Repositories;
 
 namespace WinformsLinqSQL.Models
 {

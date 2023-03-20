@@ -36,11 +36,13 @@ namespace WinformsLinqSQL.Views
             this.btnProducts = new System.Windows.Forms.Button();
             this.btnOrders = new System.Windows.Forms.Button();
             this.btnCustomers = new System.Windows.Forms.Button();
+            this.lblPage = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblPage);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.btnProducts);
             this.panel1.Controls.Add(this.btnOrders);
@@ -55,16 +57,16 @@ namespace WinformsLinqSQL.Views
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(11, 36);
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(162, 32);
+            this.label1.Size = new System.Drawing.Size(190, 38);
             this.label1.TabIndex = 1;
             this.label1.Text = "Whisky Store";
             // 
             // btnProducts
             // 
-            this.btnProducts.Location = new System.Drawing.Point(3, 218);
+            this.btnProducts.Location = new System.Drawing.Point(3, 233);
             this.btnProducts.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnProducts.Name = "btnProducts";
             this.btnProducts.Size = new System.Drawing.Size(265, 63);
@@ -75,7 +77,7 @@ namespace WinformsLinqSQL.Views
             // 
             // btnOrders
             // 
-            this.btnOrders.Location = new System.Drawing.Point(3, 150);
+            this.btnOrders.Location = new System.Drawing.Point(3, 165);
             this.btnOrders.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnOrders.Name = "btnOrders";
             this.btnOrders.Size = new System.Drawing.Size(265, 63);
@@ -86,7 +88,7 @@ namespace WinformsLinqSQL.Views
             // 
             // btnCustomers
             // 
-            this.btnCustomers.Location = new System.Drawing.Point(3, 82);
+            this.btnCustomers.Location = new System.Drawing.Point(3, 97);
             this.btnCustomers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCustomers.Name = "btnCustomers";
             this.btnCustomers.Size = new System.Drawing.Size(265, 63);
@@ -94,6 +96,17 @@ namespace WinformsLinqSQL.Views
             this.btnCustomers.Text = "Customers";
             this.btnCustomers.UseVisualStyleBackColor = true;
             this.btnCustomers.Click += new System.EventHandler(this.btnCustomers_Click);
+            // 
+            // lblPage
+            // 
+            this.lblPage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPage.AutoSize = true;
+            this.lblPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPage.Location = new System.Drawing.Point(14, 57);
+            this.lblPage.Name = "lblPage";
+            this.lblPage.Size = new System.Drawing.Size(0, 25);
+            this.lblPage.TabIndex = 2;
             // 
             // MainView
             // 
@@ -104,6 +117,7 @@ namespace WinformsLinqSQL.Views
             this.IsMdiContainer = true;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainView";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MainView";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -118,5 +132,6 @@ namespace WinformsLinqSQL.Views
         private Label label1;
         private Button btnProducts;
         private Button btnOrders;
+        private Label lblPage;
     }
 }

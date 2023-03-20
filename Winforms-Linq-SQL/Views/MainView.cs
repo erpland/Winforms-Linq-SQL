@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinformsLinqSQL.Views
@@ -22,6 +15,7 @@ namespace WinformsLinqSQL.Views
 
         private void btnCustomers_Click(object sender, EventArgs e)
         {
+            lblPage.Text = "Customers";
             if (customersView == null || customersView.IsDisposed)
             {
                 customersView = CustomersView.Instance(this);
@@ -35,6 +29,7 @@ namespace WinformsLinqSQL.Views
 
         private void btnOrders_Click(object sender, EventArgs e)
         {
+            lblPage.Text = "Orders";
             if (ordersView == null || ordersView.IsDisposed)
             {
                 ordersView = OrdersView.Instance(this);
@@ -48,7 +43,8 @@ namespace WinformsLinqSQL.Views
 
         private void btnProducts_Click(object sender, EventArgs e)
         {
-            if(productsView == null || productsView.IsDisposed)
+            lblPage.Text = "Products";
+            if (productsView == null || productsView.IsDisposed)
             {
                 productsView = ProductsView.Instance(this);
                 productsView.Show();

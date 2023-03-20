@@ -1,17 +1,9 @@
-﻿using WinformsLinqSQL.Models;
-using WinformsLinqSQL.Repositories;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
+﻿using System;
 using System.Data;
-using System.Data.Linq;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinformsLinqSQL.Models;
+using WinformsLinqSQL.Repositories;
 
 namespace WinformsLinqSQL.Views
 {

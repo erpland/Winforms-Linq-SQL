@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WinformsLinqSQL.Repositories
 {
@@ -21,7 +16,7 @@ namespace WinformsLinqSQL.Repositories
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Price is a requierd field!")]
-        [RegularExpression(@"^(?:\d*\.\d+|\d+\.\d*|\d+)$", ErrorMessage = "Price must contain only numbers!")]
+        [RegularExpression(@"^(?:\d*\.\d+|\d+\.\d*|\d+)$", ErrorMessage = "Price must contain only postive numbers!")]
         [Column(Name = "price")]
         public double Price { get; set; }
 
